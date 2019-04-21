@@ -1,23 +1,79 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import Draggable from 'react-draggable';
+import marked from 'marked';
 
 class Note extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Note 1',
-      text: 'Note Text 1',
-      x: 20,
-      y: 20,
-      // id: this.props.id,
-      // editMode: false,
+      title: this.props.title,
+      text: this.props.text,
+      x: this.props.x,
+      y: this.props.y,
+      id: this.props.id,
+      editMode: false,
     };
     this.onDrag = this.onDrag.bind(this);
+    this.onMin = this.onMin.bind(this);
+    this.onEdit = this.onEdit.bind(this);
+    this.onTitle = this.onTitle.bind(this);
+    this.onContent = this.onContent.bind(this);
+  }
+
+  onTitle(event) {
+    this.setState({ title: event.target.value });
+  }
+
+  onContent(event) {
+    this.setState({ text: event.target.value });
   }
 
   onDrag(e, data) {
     this.setState({ x: data.x, y: data.y });
+  }
+
+  onMin(event) {
+    this.props.onDelete(this.state.id);
+  }
+
+  onEdit(event) {
+    this.setState(prevState => ({
+      editMode: !prevState.editMode,
+    }));
+  }
+
+  renderNote() {
+    if (this.state.editMode) {
+      return (
+        <div className="note">
+          <div className="note-header">
+            <div className="note-icons">
+              <i className="note-edit fa fa-save" onClick={this.onEdit} />
+              <i className="note-mover fa fa-map-pin" />
+              <i className="note-trash fa fa-minus" onClick={this.onMin} />
+            </div>
+            <input className="note-title-edit" placeholder="Edit Title" onChange={this.onTitle} maxLength="15" value={this.state.title} />
+          </div>
+          <textarea className="note-content-edit" placeholder="Edit Content" onChange={this.onContent} maxLength="300" value={this.state.text} />
+        </div>
+      );
+    } else {
+      return (
+        <div className="note">
+          <div className="note-header">
+            <div className="note-icons">
+              <i className="note-edit fa fa-edit" onClick={this.onEdit} />
+              <i className="note-mover fa fa-map-pin" />
+              <i className="note-trash fa fa-minus" onClick={this.onMin} />
+            </div>
+            <p className="note-title">{this.state.title}</p>
+          </div>
+          <div className="note-content" dangerouslySetInnerHTML={{ __html: marked(this.state.text || '') }} />
+        </div>
+      );
+    }
   }
 
   render() {
@@ -31,17 +87,7 @@ class Note extends Component {
         onDrag={this.onDrag}
         onStop={this.onStopDrag}
       >
-        <div className="note">
-          <div className="note-header">
-            <p className="note-title">{this.state.title}</p>
-            <div className="note-icons">
-              <i className="note-edit fa fa-edit" />
-              <i className="note-mover fa fa-map-pin" />
-              <i className="note-trash fa fa-minus" />
-            </div>
-          </div>
-          <p className="note-content">{this.state.text}</p>
-        </div>
+        {this.renderNote()}
       </Draggable>
     );
   }

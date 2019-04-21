@@ -25,11 +25,13 @@ body, html {
   z-index: 1000;
 }
 
-h1 {
+#Title-Card {
   color: black;
   font-size: 50px;
+  font-family: 'Bangers', cursive;
+  letter-spacing: 2px;
   background: $paper-color;
-  padding: 30px 20px;
+  padding: 27px 40px;
   box-shadow: 0 2px 3px black;
   margin-top: -25px;
   z-index: 0;
@@ -78,36 +80,68 @@ text-transform: capitalize;
   background-color: $paper-color;
 }
 
+#note-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .note {
   width: 200px;
   height: 250px;
-  padding: 20px;
+  padding: 26px 20px 14px 20px;
   box-shadow: 0 2px 3px black;
   background-color: $paper-color;
 }
 
 .note-header {
+  position: relative;
+}
+
+.note-icons {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column-reverse;
+  position: absolute;
+  right: 0;
+  top: -14px;
+  align-items: center;
+  justify-content: center;
 }
 
-.note-title {
+.note-icons .fa {
+  margin-bottom: 6px;
+  color: rgb(185, 30, 30);
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.note-icons .fa:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+
+.note-title, .note-title-edit {
   font-size: 20px;
-  margin: 0;
+  margin-top: 0;
 }
 
-.note-content {
+.note-title-edit {
   border: 1px solid gray;
+  margin-top: -10px;
+  padding: 8px;
+  width: 78%;
+}
+
+.note-content, .note-content-edit {
+  border: 1px solid gray;
+  font-size: 12px;
   height: 70%;
   padding: 8px;
 }
 
-i {
-  padding-left: 12px;
-}
-
-.note-mover {
-  cursor: pointer;
+.note-content-edit {
+  margin-top: 14px;
+  width: 91%;
 }
 
 

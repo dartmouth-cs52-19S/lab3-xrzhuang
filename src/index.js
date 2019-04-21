@@ -29,9 +29,9 @@ class App extends Component {
     const note = {
       title: str,
       text: 'new note',
-      x: 300,
-      y: 300,
-      zIndex: 0,
+      x: this.state.id * 3,
+      y: 50,
+      zIndex: (this.state.id),
     };
     this.setState(prevState => ({
       notes: prevState.notes.set(prevState.id + 1, note),
@@ -43,10 +43,14 @@ class App extends Component {
     return (
       <div id="Title-Create">
         <img id="Title-Pin" src={require('./img/pin.png')} height="40px" width="50px" alt="pin" />
-        <h1> My Note Board</h1>
+        <h1 id="Title-Card">My Note Board</h1>
         <InputBar addTitle={this.onAdd} />
         <div id="note-section">
-          <Note />
+          {this.state.notes.entrySeq().map(([id, note]) => {
+            return (
+              <Note key={id} id={id} title={note.title} text={note.text} x={note.x} y={note.y} onDelete={this.onDelete} />
+            );
+          })}
         </div>
       </div>
     );

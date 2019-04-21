@@ -12,6 +12,9 @@ class InputBar extends Component {
 
   onSubmit() {
     this.props.addTitle(this.state.title);
+    this.setState({
+      title: 'New Note Title',
+    });
   }
 
   onInputChange(event) {
@@ -21,7 +24,7 @@ class InputBar extends Component {
   render() {
     return (
       <div id="create-note">
-        <input id="input-bar" size="50" max="50" onChange={this.onInputChange} value={this.state.title} />
+        <input id="input-bar" size="15" maxLength="15" onChange={this.onInputChange} value={this.state.title} />
         <button id="submit-btn" type="submit" onClick={this.onSubmit}> Create </button>
       </div>
     );
