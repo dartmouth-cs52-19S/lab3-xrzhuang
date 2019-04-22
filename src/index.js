@@ -5,38 +5,64 @@ import './style.scss';
 import { Map } from 'immutable';
 import Note from './components/note';
 import InputBar from './components/create_note';
+import DataStore from './services/datastore';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: 0,
+      n: 0,
       // eslint-disable-next-line new-cap
       notes: Map(),
     };
+    this.db = new DataStore();
     this.onDelete = this.onDelete.bind(this);
     this.onAdd = this.onAdd.bind(this);
   }
 
-  onDelete(id) {
-    this.setState(prevState => ({
-      notes: prevState.notes.delete(id),
-    }));
+  componentDidMount() {
+    this.db.fetchNotes((notes) => {
+      // eslint-disable-next-line new-cap
+      this.setState({ notes: Map(notes) });
+    });
   }
 
+  // deleting a note given id
+  onDelete(id) {
+    // decrement counter
+    this.setState(prevState => ({
+      n: prevState.n - 1,
+    }));
+
+    // delete note from db
+    this.db.deleteNote(id);
+  }
+
+  // Adding a note given input str
   onAdd(str) {
-    console.log(str);
+    // create the new note, set defaults
     const note = {
       title: str,
-      text: 'new note',
-      x: this.state.id * 3,
+      text: 'New Note Content',
+      x: 50,
       y: 50,
-      zIndex: (this.state.id),
+      zIndex: (this.state.n),
     };
+
+    // increment counter
     this.setState(prevState => ({
-      notes: prevState.notes.set(prevState.id + 1, note),
-      id: prevState.id + 1,
+      n: prevState.n + 1,
     }));
+
+    // add the note to db
+    this.db.addNote(note);
+  }
+
+  // update the note given the id and new set of fields
+  onUpdate = (id, values) => {
+    this.state.n += 1;
+    Object.assign(values, { zIndex: (this.state.n + 1) });
+    this.db.updateNote(id, values);
   }
 
   render() {
@@ -48,7 +74,7 @@ class App extends Component {
         <div id="note-section">
           {this.state.notes.entrySeq().map(([id, note]) => {
             return (
-              <Note key={id} id={id} title={note.title} text={note.text} x={note.x} y={note.y} onDelete={this.onDelete} />
+              <Note key={id} id={id} title={note.title} text={note.text} x={note.x} y={note.y} zIndex={note.zIndex} onDelete={this.onDelete} updateNote={this.onUpdate} />
             );
           })}
         </div>

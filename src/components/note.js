@@ -12,6 +12,7 @@ class Note extends Component {
       text: this.props.text,
       x: this.props.x,
       y: this.props.y,
+      zIndex: this.props.zIndex,
       id: this.props.id,
       editMode: false,
     };
@@ -20,6 +21,7 @@ class Note extends Component {
     this.onEdit = this.onEdit.bind(this);
     this.onTitle = this.onTitle.bind(this);
     this.onContent = this.onContent.bind(this);
+    this.updateNote = this.updateNote.bind(this);
   }
 
   onTitle(event) {
@@ -32,6 +34,7 @@ class Note extends Component {
 
   onDrag(e, data) {
     this.setState({ x: data.x, y: data.y });
+    this.updateNote();
   }
 
   onMin(event) {
@@ -39,9 +42,29 @@ class Note extends Component {
   }
 
   onEdit(event) {
+    // flip the edit mode
     this.setState(prevState => ({
       editMode: !prevState.editMode,
     }));
+
+    // check the previous state edit mode, if previously it was true, then now it will be false
+    // this means that we hit save, and this means we need to update!
+    if (this.state.editMode) {
+      this.updateNote();
+    }
+  }
+
+  // give our note some new values, and update that on the id
+  updateNote() {
+    const values = {
+      title: this.state.title,
+      text: this.state.text,
+      x: this.state.x,
+      y: this.state.y,
+      zIndex: this.state.zIndex,
+    };
+
+    this.props.updateNote(this.state.id, values);
   }
 
   renderNote() {
@@ -52,7 +75,7 @@ class Note extends Component {
             <div className="note-icons">
               <i className="note-edit fa fa-save" onClick={this.onEdit} />
               <i className="note-mover fa fa-map-pin" />
-              <i className="note-trash fa fa-minus" onClick={this.onMin} />
+              <i className="note-min fa fa-minus" onClick={this.onMin} />
             </div>
             <input className="note-title-edit" placeholder="Edit Title" onChange={this.onTitle} maxLength="15" value={this.state.title} />
           </div>
@@ -66,7 +89,7 @@ class Note extends Component {
             <div className="note-icons">
               <i className="note-edit fa fa-edit" onClick={this.onEdit} />
               <i className="note-mover fa fa-map-pin" />
-              <i className="note-trash fa fa-minus" onClick={this.onMin} />
+              <i className="note-min fa fa-minus" onClick={this.onMin} />
             </div>
             <p className="note-title">{this.state.title}</p>
           </div>

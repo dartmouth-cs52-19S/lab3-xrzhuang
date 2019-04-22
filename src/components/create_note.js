@@ -10,6 +10,7 @@ class InputBar extends Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
+  // pass the title and reset the state
   onSubmit() {
     this.props.addTitle(this.state.title);
     this.setState({
@@ -17,6 +18,7 @@ class InputBar extends Component {
     });
   }
 
+  // as input changes, reset the state to the input
   onInputChange(event) {
     this.setState({ title: event.target.value });
   }
