@@ -14,10 +14,13 @@ class App extends Component {
       n: 0,
       // eslint-disable-next-line new-cap
       notes: Map(),
+      clearAll: true,
     };
     this.db = new DataStore();
     this.onDelete = this.onDelete.bind(this);
     this.onAdd = this.onAdd.bind(this);
+    this.onClear = this.onClear.bind(this);
+    this.myRef = React.createRef();
   }
 
   componentDidMount() {
@@ -60,18 +63,32 @@ class App extends Component {
 
   // update the note given the id and new set of fields
   onUpdate = (id, values) => {
-    this.state.n += 1;
     Object.assign(values, { zIndex: (this.state.n + 1) });
     this.db.updateNote(id, values);
+  }
+
+  // on view boolean flip to call
+  onClear = (bool) => {
+    // toggle view all boolean
+    this.setState(prevState => ({
+      clearAll: !prevState.clearAll,
+    }));
+    const node = this.myRef.current;
+    if (this.state.clearAll) {
+      this.state.notes.keySeq().forEach(k => this.onDelete(k));
+    } else {
+      node.id = 'note-section';
+    }
   }
 
   render() {
     return (
       <div id="Title-Create">
+        <button id="clearall-btn" type="submit" onClick={this.onClear}> Clear All </button>
         <img id="Title-Pin" src={require('./img/pin.png')} height="40px" width="50px" alt="pin" />
         <h1 id="Title-Card">My Note Board</h1>
         <InputBar addTitle={this.onAdd} />
-        <div id="note-section">
+        <div ref={this.myRef} id="note-section">
           {this.state.notes.entrySeq().map(([id, note]) => {
             return (
               <Note key={id} id={id} title={note.title} text={note.text} x={note.x} y={note.y} zIndex={note.zIndex} onDelete={this.onDelete} updateNote={this.onUpdate} />

@@ -86,6 +86,7 @@ class Note extends Component {
       return (
         <div className="note">
           <div className="note-header">
+            <i id=" fa fa-save" onClick={this.onEdit} />
             <div className="note-icons">
               <i className="note-edit fa fa-edit" onClick={this.onEdit} />
               <i className="note-mover fa fa-map-pin" />
