@@ -96,6 +96,29 @@ text-transform: capitalize;
   z-index: 100;
 }
 
+#viewall-btn {
+  background: #525252;
+  background: linear-gradient(to bottom, #525252, #121212);
+  border-radius: 4px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+  margin-left: 80px;
+  text-transform: uppercase;
+  transition: opacity 800ms ease-out;
+  outline: none;
+  opacity: 0.8;
+  width: 80px;
+  position: fixed;
+  right: 170px;
+  bottom: 40px;
+  z-index: 100;
+}
+
 #viewall-notes {
   display: flex;
   flex-direction: row;

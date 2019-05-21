@@ -21,7 +21,6 @@ class Note extends Component {
     this.onEdit = this.onEdit.bind(this);
     this.onTitle = this.onTitle.bind(this);
     this.onContent = this.onContent.bind(this);
-    this.updateNote = this.updateNote.bind(this);
   }
 
   onTitle(event) {
